@@ -1,10 +1,13 @@
 package com.testSpring.Tests.service;
 
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+
 import com.testSpring.Tests.model.Incomes;
 import com.testSpring.Tests.persistence.DAO.IncomesDAO;
 
-import java.util.List;
-
+@Service
 public class IncomesService {
 
     IncomesDAO incomesDAO;

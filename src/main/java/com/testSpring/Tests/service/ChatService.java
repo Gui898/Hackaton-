@@ -2,9 +2,12 @@ package com.testSpring.Tests.service;
 
 import java.util.List;
 
+import org.springframework.stereotype.Service;
+
 import com.testSpring.Tests.model.Chat;
 import com.testSpring.Tests.persistence.DAO.ChatDAO;
 
+@Service
 public class ChatService {
     
     public ChatDAO chatDAO;

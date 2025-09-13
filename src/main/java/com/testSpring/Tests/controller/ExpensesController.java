@@ -15,56 +15,57 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.testSpring.Tests.model.Expenses;
+import com.testSpring.Tests.service.ExpensesService;
+
 // Class Controller, a Bean, implementing the ProtocolMethod interface,
 // With a Request Mapping in a path. Uses 5500 ports (Live Server) to access;  
 @RestController
 @RequestMapping("/expenses")
 @CrossOrigin(origins = "http://127.0.0.1:5500")
-public class ExpensesController implements ProtocolMethods<ExpensesController>{
-    
-    // Overriding and using Post method;
-    @Override
-    @PostMapping
-    public ExpensesController post(@RequestBody ExpensesController expense) {
-        return null;
+public class ExpensesController implements ProtocolMethods<Expenses> {
+
+    private final ExpensesService expensesService;
+    public ExpensesController(ExpensesService expensesService) {
+        this.expensesService = expensesService;
     }
 
-    // Overriding and using Delete method;
+    @Override
+    @PostMapping
+    public Expenses post(@RequestBody Expenses expense) {
+        return expensesService.addExpenses(expense);
+    }
+
     @Override
     @DeleteMapping("/{id}")
     public boolean delete(@PathVariable long id) {
-        return false;
+        expensesService.deleteExpenses(id);
+        return true;
     }
 
-    // Overriding and using Put method;
     @Override
     @PutMapping("/{id}")
-    public ExpensesController put(@PathVariable long id, @RequestBody ExpensesController user) {
-
-        return null;
+    public Expenses put(@PathVariable long id, @RequestBody Expenses expense) {
+        expense.setIdExpenses(id);
+        return expensesService.updateExpenses(expense);
     }
 
-    // Overriding and using Patch method;
     @Override
     @PatchMapping("/{id}")
-    public ExpensesController patch(@PathVariable long id, @RequestBody ExpensesController user) {
-
-        return null;
+    public Expenses patch(@PathVariable long id, @RequestBody Expenses expense) {
+        expense.setIdExpenses(id);
+        return expensesService.updateExpenses(expense);
     }
 
-    // Overriding and using Get method with ID Path;
     @Override
     @GetMapping("/{id}")
-    public ExpensesController getById(@PathVariable long id) {
-
-        return null;
+    public Expenses getById(@PathVariable long id) {
+        return expensesService.getExpensesById(id);
     }
 
-    // Overriding and using Get method, returning all;
     @Override
     @GetMapping
-    public List<ExpensesController> getAll() {
-
-        return null;
+    public List<Expenses> getAll() {
+        return expensesService.getAllExpenses();
     }
 }

@@ -85,7 +85,7 @@ public class ElderlyDAO implements Crud<Elderly>{
             preparedStatement.executeUpdate();
         }
         catch(SQLException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
         finally {
 
@@ -115,7 +115,7 @@ public class ElderlyDAO implements Crud<Elderly>{
             preparedStatement.executeUpdate();
         }
         catch(SQLException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
         finally {
 
@@ -152,7 +152,7 @@ public class ElderlyDAO implements Crud<Elderly>{
             preparedStatement.executeUpdate();
         }
         catch(SQLException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
         finally {
 
@@ -196,7 +196,7 @@ public class ElderlyDAO implements Crud<Elderly>{
             }
         }
         catch(SQLException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
         finally {
 
@@ -243,7 +243,7 @@ public class ElderlyDAO implements Crud<Elderly>{
             }
         }
         catch(SQLException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
         finally {
 

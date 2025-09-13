@@ -13,58 +13,56 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.testSpring.Tests.controller.ProtocolMethods;
 import com.testSpring.Tests.model.Incomes;
+import com.testSpring.Tests.service.IncomesService;
 
-/**
- * Controller responsável por gerenciar operações relacionadas a Incomes.
- * Implementa a interface ProtocolMethods para garantir consistência
- * entre os métodos de CRUD.
- */
 @RestController
 @RequestMapping("/incomes")
 @CrossOrigin(origins = "http://127.0.0.1:5500")
 public class IncomesController implements ProtocolMethods<Incomes> {
 
+    private final IncomesService incomesService;
+
+    public IncomesController(IncomesService incomesService) {
+        this.incomesService = incomesService;
+    }
+
     @Override
     @PostMapping
     public Incomes post(@RequestBody Incomes income) {
-        // TODO: implementar lógica para salvar "income"
-        return null;
+        return incomesService.addIncomes(income);
     }
 
     @Override
     @DeleteMapping("/{id}")
     public boolean delete(@PathVariable long id) {
-        // TODO: implementar lógica para deletar por "id"
-        return false;
+        incomesService.deleteIncomes(id);
+        return true;
     }
 
     @Override
     @PutMapping("/{id}")
     public Incomes put(@PathVariable long id, @RequestBody Incomes income) {
-        // TODO: implementar lógica para atualizar "income" por "id"
-        return null;
+        income.setIdIncomes(id);
+        return incomesService.updateIncomes(income);
     }
 
     @Override
     @PatchMapping("/{id}")
     public Incomes patch(@PathVariable long id, @RequestBody Incomes income) {
-        // TODO: implementar lógica para atualização parcial
-        return null;
+        income.setIdIncomes(id);
+        return incomesService.updateIncomes(income);
     }
 
     @Override
     @GetMapping("/{id}")
     public Incomes getById(@PathVariable long id) {
-        // TODO: implementar lógica para buscar por "id"
-        return null;
+        return incomesService.getIncomesById(id);
     }
 
     @Override
     @GetMapping
     public List<Incomes> getAll() {
-        // TODO: implementar lógica para listar todos
-        return null;
+        return incomesService.getAllIncomes();
     }
 }

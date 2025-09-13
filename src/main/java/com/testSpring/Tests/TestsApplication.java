@@ -13,10 +13,6 @@ public class TestsApplication {
 
 		SpringApplication.run(TestsApplication.class, args);
 
-        Elderly eld = new Elderly("Felipe", "felipe@gmail.com", "1277", "00987654321", "2009", "M", "99111111111");
-        ElderlyDAO eDAO = new ElderlyDAO(new MySqlConnection());
-        eld.setIdElderly(3);
-        eDAO.update(eld);
 	}
 
 }
