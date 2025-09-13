@@ -1,10 +1,11 @@
 package com.testSpring.Tests.service;
 
-import com.testSpring.Tests.model.Elderly;
-import com.testSpring.Tests.persistence.DAO.ElderlyDAO;
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import com.testSpring.Tests.model.Elderly;
+import com.testSpring.Tests.persistence.DAO.ElderlyDAO;
 
 @Service
 public class ElderlyService {
@@ -34,7 +35,7 @@ public class ElderlyService {
         return elderlyDAO.selectById(id);
     }
 
-    public List<Elderly> getAllElderlies(){
+    public List<Elderly> getAllElderly(){
         return elderlyDAO.selectAll();
     }
 }

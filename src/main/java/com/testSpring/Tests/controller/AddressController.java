@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.testSpring.Tests.model.Address;
+import com.testSpring.Tests.service.AddressService;
 
 /**
  * Controller responsável por gerenciar operações relacionadas a Incomes.
@@ -25,45 +26,48 @@ import com.testSpring.Tests.model.Address;
 @CrossOrigin(origins = "http://127.0.0.1:5500")
 public class AddressController implements ProtocolMethods<Address> {
 
+    private final AddressService addressService;
+
+    public AddressController(AddressService addressService) {
+        this.addressService = addressService;
+    }
+
     @Override
     @PostMapping
     public Address post(@RequestBody Address address) {
-        // TODO: implementar lógica para salvar "income"
-        return null;
+        return addressService.addAddress(address);
     }
 
     @Override
     @DeleteMapping("/{id}")
     public boolean delete(@PathVariable long id) {
-        // TODO: implementar lógica para deletar por "id"
-        return false;
+        addressService.deleteAddress(id);
+        return true;
     }
 
     @Override
     @PutMapping("/{id}")
-    public Address put(@PathVariable long id, @RequestBody Address income) {
-        // TODO: implementar lógica para atualizar "income" por "id"
-        return null;
+    public Address put(@PathVariable long id, @RequestBody Address address) {
+        address.setIdAddress(id);
+        return addressService.updateAddress(address);
     }
 
     @Override
     @PatchMapping("/{id}")
-    public Address patch(@PathVariable long id, @RequestBody Address income) {
-        // TODO: implementar lógica para atualização parcial
-        return null;
+    public Address patch(@PathVariable long id, @RequestBody Address address) {
+        address.setIdAddress(id);
+        return addressService.updateAddress(address);
     }
 
     @Override
     @GetMapping("/{id}")
     public Address getById(@PathVariable long id) {
-        // TODO: implementar lógica para buscar por "id"
-        return null;
+        return addressService.getAddressById(id);
     }
 
     @Override
     @GetMapping
     public List<Address> getAll() {
-        // TODO: implementar lógica para listar todos
-        return null;
+        return addressService.getAllAddresses();
     }
 }
