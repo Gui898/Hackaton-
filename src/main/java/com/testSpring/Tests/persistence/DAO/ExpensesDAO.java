@@ -18,11 +18,11 @@ import com.testSpring.Tests.model.Expenses;
 import com.testSpring.Tests.persistence.Crud;
 import com.testSpring.Tests.persistence.MySqlConnection;
 
-// ExpensesDAO class implementing the CRUD; 
+// ExpensesDAO class implementing the CRUD;
 @Repository
 public class ExpensesDAO implements Crud<Expenses>{
-    
-    // The MySQLConnection attribute; 
+
+    // The MySQLConnection attribute;
     private final MySqlConnection mySqlConnection;
 
     // Constructor of the ExpensesDAO;
@@ -30,38 +30,38 @@ public class ExpensesDAO implements Crud<Expenses>{
         this.mySqlConnection = mySqlConnection;
     }
 
-    // SQL code to Insert; 
-    private final String INSERT_EXPENSES = 
-        """
-        INSERT INTO expenses (id_expenses, fix_or_not, value_expenses, payment_date, type_expenses, portion)
-        VALUES (NULL, ?, ?, ?, ?, ?);
-        """;
-    
+    // SQL code to Insert;
+    private final String INSERT_EXPENSES =
+            """
+            INSERT INTO expenses (id_expenses, fix_or_not, value_expenses, payment_date, type_expenses, portion)
+            VALUES (NULL, ?, ?, ?, ?, ?);
+            """;
+
     // SQL code to Delete;
-    private final String DELETE_EXPENSES = 
-        """
-        DELETE FROM expenses WHERE id_expenses = ?;
-        """;
+    private final String DELETE_EXPENSES =
+            """
+            DELETE FROM expenses WHERE id_expenses = ?;
+            """;
 
     // SQL code to Update;
-    private final String UPDATE_EXPENSES = 
-        """
-        UPDATE expenses
-        SET fix_or_not = ?, value_expenses = ?, payment_date = ?, type_expenses = ?, portion = ?
-        WHERE id_expenses = ?;
-        """;
+    private final String UPDATE_EXPENSES =
+            """
+            UPDATE expenses
+            SET fix_or_not = ?, value_expenses = ?, payment_date = ?, type_expenses = ?, portion = ?
+            WHERE id_expenses = ?;
+            """;
 
     // SQL code to Select by the ID;
-    private final String SELECT_EXPENSES_BY_ID = 
-        """
-        SELECT * FROM elderly eld INNER JOIN expenses e ON eld.id_elderly = e.id_elderly WHERE id_expenses = ?;
-        """;
+    private final String SELECT_EXPENSES_BY_ID =
+            """
+            SELECT * FROM elderly eld INNER JOIN expenses e ON eld.id_elderly = e.id_elderly WHERE id_expenses = ?;
+            """;
 
     // SQL code to Select All;
-    private final String SELECT_ALL_EXPENSES = 
-        """
-        SELECT * FROM elderly eld INNER JOIN expenses e ON eld.id_elderly = e.id_elderly;
-        """;
+    private final String SELECT_ALL_EXPENSES =
+            """
+            SELECT * FROM elderly eld INNER JOIN expenses e ON eld.id_elderly = e.id_elderly;
+            """;
 
     // Add method;
     @Override
@@ -70,9 +70,9 @@ public class ExpensesDAO implements Crud<Expenses>{
         try {
             mySqlConnection.openConnection();
 
-            PreparedStatement preparedStatement = 
-                mySqlConnection.getConnection().prepareStatement(INSERT_EXPENSES);
-        
+            PreparedStatement preparedStatement =
+                    mySqlConnection.getConnection().prepareStatement(INSERT_EXPENSES);
+
             preparedStatement.setBoolean(1, expense.isFixOrNot());
             preparedStatement.setDouble(2, expense.getValueExpenses());
             preparedStatement.setDate(3, Date.valueOf(expense.getDatePaymentExpenses().atStartOfDay().toLocalDate()));
@@ -96,9 +96,9 @@ public class ExpensesDAO implements Crud<Expenses>{
         try {
             mySqlConnection.openConnection();
 
-            PreparedStatement preparedStatement = 
-                mySqlConnection.getConnection().prepareStatement(DELETE_EXPENSES);
-            
+            PreparedStatement preparedStatement =
+                    mySqlConnection.getConnection().prepareStatement(DELETE_EXPENSES);
+
             preparedStatement.setLong(1, id);
 
             preparedStatement.executeUpdate();
@@ -107,7 +107,7 @@ public class ExpensesDAO implements Crud<Expenses>{
             System.out.println(e.getMessage());
         }
         finally {
-            mySqlConnection.closeConnection(); 
+            mySqlConnection.closeConnection();
         }
     }
 
@@ -118,8 +118,8 @@ public class ExpensesDAO implements Crud<Expenses>{
         try {
             mySqlConnection.openConnection();
 
-            PreparedStatement preparedStatement = 
-                mySqlConnection.getConnection().prepareStatement(UPDATE_EXPENSES);
+            PreparedStatement preparedStatement =
+                    mySqlConnection.getConnection().prepareStatement(UPDATE_EXPENSES);
 
             preparedStatement.setBoolean(1, expense.isFixOrNot());
             preparedStatement.setDouble(2, expense.getValueExpenses());
@@ -147,9 +147,9 @@ public class ExpensesDAO implements Crud<Expenses>{
         try {
             mySqlConnection.openConnection();
 
-            PreparedStatement preparedStatement = 
-                mySqlConnection.getConnection().prepareStatement(SELECT_EXPENSES_BY_ID);
-            
+            PreparedStatement preparedStatement =
+                    mySqlConnection.getConnection().prepareStatement(SELECT_EXPENSES_BY_ID);
+
             preparedStatement.setLong(1, id);
 
             ResultSet resultSet = preparedStatement.executeQuery();
@@ -165,12 +165,12 @@ public class ExpensesDAO implements Crud<Expenses>{
                 LocalDate data = resultSet.getDate("payment_date").toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
 
                 expense = new Expenses(
-                    resultSet.getBoolean("fix_or_not"),
-                    data,
-                    resultSet.getDouble("value_expenses"),
-                    resultSet.getString("type_expenses"),
-                    resultSet.getInt("portion")
-                , elderly);
+                        resultSet.getBoolean("fix_or_not"),
+                        data,
+                        resultSet.getDouble("value_expenses"),
+                        resultSet.getString("type_expenses"),
+                        resultSet.getInt("portion")
+                        , elderly);
                 expense.setIdExpenses(resultSet.getLong("id_expenses"));
             }
         }
@@ -187,15 +187,15 @@ public class ExpensesDAO implements Crud<Expenses>{
     // Select All method;
     @Override
     public List<Expenses> selectAll() {
-        
+
         List<Expenses> allExpenses = new ArrayList<>();
 
         try {
             mySqlConnection.openConnection();
 
-            PreparedStatement preparedStatement = 
-                mySqlConnection.getConnection().prepareStatement(SELECT_ALL_EXPENSES);
-            
+            PreparedStatement preparedStatement =
+                    mySqlConnection.getConnection().prepareStatement(SELECT_ALL_EXPENSES);
+
             ResultSet resultSet = preparedStatement.executeQuery();
 
             while(resultSet.next()) {
@@ -222,9 +222,40 @@ public class ExpensesDAO implements Crud<Expenses>{
             System.out.println(e.getMessage());
         }
         finally {
-           mySqlConnection.closeConnection(); 
+            mySqlConnection.closeConnection();
         }
 
         return allExpenses;
+    }
+
+    public double sumExpensesById(Elderly elderly) {
+        double totalExpenses = 0.0;
+
+        try {
+            mySqlConnection.openConnection();
+
+            String sql = """
+                SELECT SUM(value_expenses)
+                FROM expenses
+                WHERE id_elderly = ?;
+            """;
+
+            PreparedStatement preparedStatement =
+                    mySqlConnection.getConnection().prepareStatement(sql);
+
+            preparedStatement.setLong(1, elderly.getIdElderly());
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            if (resultSet.next()) {
+                totalExpenses = resultSet.getDouble(1);
+            }
+        } catch(SQLException e) {
+            System.out.println(e.getMessage());
+        } finally {
+            mySqlConnection.closeConnection();
+        }
+
+        return totalExpenses;
     }
 }

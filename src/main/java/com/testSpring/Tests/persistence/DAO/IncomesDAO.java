@@ -11,18 +11,18 @@ import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.testSpring.Tests.model.Elderly;
 import org.springframework.stereotype.Repository;
 
+import com.testSpring.Tests.model.Elderly;
 import com.testSpring.Tests.model.Incomes;
 import com.testSpring.Tests.persistence.Crud;
 import com.testSpring.Tests.persistence.MySqlConnection;
 
-// IncomesDAO class implementing the CRUD; 
+// IncomesDAO class implementing the CRUD;
 @Repository
 public class IncomesDAO implements Crud<Incomes>{
-    
-    // The MySQLConnection attribute; 
+
+    // The MySQLConnection attribute;
     private final MySqlConnection mySqlConnection;
 
     // Constructor of the IncomesDAO;
@@ -30,38 +30,52 @@ public class IncomesDAO implements Crud<Incomes>{
         this.mySqlConnection = mySqlConnection;
     }
 
-    // SQL code to Insert; 
-    private final String INSERT_INCOMES = 
-        """
-        INSERT INTO incomes (id_incomes, fix_or_not, value_incomes, payment_date, type_incomes, frequency)
-        VALUES (NULL, ?, ?, ?, ?, ?);
-        """;
-    
+    // SQL code to Insert;
+    private final String INSERT_INCOMES =
+            """
+            INSERT INTO incomes (id_incomes, fix_or_not, value_incomes, payment_date, type_incomes, frequency)
+            VALUES (NULL, ?, ?, ?, ?, ?);
+            """;
+
     // SQL code to Delete;
-    private final String DELETE_INCOMES = 
-        """
-        DELETE FROM incomes WHERE id_incomes = ?;
-        """;
+    private final String DELETE_INCOMES =
+            """
+            DELETE FROM incomes WHERE id_incomes = ?;
+            """;
 
     // SQL code to Update;
-    private final String UPDATE_INCOMES = 
-        """
-        UPDATE incomes
-        SET fix_or_not = ?, value_incomes = ?, payment_date = ?, type_incomes = ?, frequency = ?
-        WHERE id_incomes = ?;
-        """;
+    private final String UPDATE_INCOMES =
+            """
+            UPDATE incomes
+            SET fix_or_not = ?, value_incomes = ?, payment_date = ?, type_incomes = ?, frequency = ?
+            WHERE id_incomes = ?;
+            """;
 
     // SQL code to Select by the ID;
-    private final String SELECT_INCOMES_BY_ID = 
-        """
-        SELECT * FROM elderly e INNER JOIN incomes i ON e.id_elderly = i.id_elderly WHERE id_incomes = ?;
-        """;
+    private final String SELECT_INCOMES_BY_ID =
+            """
+            SELECT * FROM elderly e INNER JOIN incomes i ON e.id_elderly = i.id_elderly WHERE id_incomes = ?;
+            """;
 
     // SQL code to Select All;
-    private final String SELECT_ALL_INCOMES = 
-        """
-         SELECT * FROM elderly e INNER JOIN incomes i ON e.id_elderly = i.id_elderly;
-        """;
+    private final String SELECT_ALL_INCOMES =
+            """
+             SELECT * FROM elderly e INNER JOIN incomes i ON e.id_elderly = i.id_elderly;
+            """;
+
+    private final String SELECT_INCOMES_BY_ELDERLY_ID =
+            """
+             SELECT SUM(value_incomes) 
+             FROM (elderly e INNER JOIN incomes i ON e.id_elderly = i.id_elderly) 
+             WHERE id_elderly = ?;
+            """;
+
+    private final String SELECT_EXPENSES_BY_ELDERLY_ID =
+            """
+            SELECT SUM(value_expenses)
+            FROM (elderly e INNER JOIN expenses ex ON e.id_elderly = ex.id_elderly)
+            WHERE id_elderly = ?;
+            """;
 
     // Add method;
     @Override
@@ -70,9 +84,9 @@ public class IncomesDAO implements Crud<Incomes>{
         try {
             mySqlConnection.openConnection();
 
-            PreparedStatement preparedStatement = 
-                mySqlConnection.getConnection().prepareStatement(INSERT_INCOMES);
-        
+            PreparedStatement preparedStatement =
+                    mySqlConnection.getConnection().prepareStatement(INSERT_INCOMES);
+
             preparedStatement.setBoolean(1, income.isFixOrNot());
             preparedStatement.setDouble(2, income.getValueIncomes());
             preparedStatement.setDate(3, Date.valueOf(income.getDatePaymentIncomes().atStartOfDay().toLocalDate()));
@@ -96,9 +110,9 @@ public class IncomesDAO implements Crud<Incomes>{
         try {
             mySqlConnection.openConnection();
 
-            PreparedStatement preparedStatement = 
-                mySqlConnection.getConnection().prepareStatement(DELETE_INCOMES);
-            
+            PreparedStatement preparedStatement =
+                    mySqlConnection.getConnection().prepareStatement(DELETE_INCOMES);
+
             preparedStatement.setLong(1, id);
 
             preparedStatement.executeUpdate();
@@ -107,7 +121,7 @@ public class IncomesDAO implements Crud<Incomes>{
             System.out.println(e.getMessage());
         }
         finally {
-            mySqlConnection.closeConnection(); 
+            mySqlConnection.closeConnection();
         }
     }
 
@@ -118,8 +132,8 @@ public class IncomesDAO implements Crud<Incomes>{
         try {
             mySqlConnection.openConnection();
 
-            PreparedStatement preparedStatement = 
-                mySqlConnection.getConnection().prepareStatement(UPDATE_INCOMES);
+            PreparedStatement preparedStatement =
+                    mySqlConnection.getConnection().prepareStatement(UPDATE_INCOMES);
 
             preparedStatement.setBoolean(1, income.isFixOrNot());
             preparedStatement.setDouble(2, income.getValueIncomes());
@@ -147,9 +161,9 @@ public class IncomesDAO implements Crud<Incomes>{
         try {
             mySqlConnection.openConnection();
 
-            PreparedStatement preparedStatement = 
-                mySqlConnection.getConnection().prepareStatement(SELECT_INCOMES_BY_ID);
-            
+            PreparedStatement preparedStatement =
+                    mySqlConnection.getConnection().prepareStatement(SELECT_INCOMES_BY_ID);
+
             preparedStatement.setLong(1, id);
 
             ResultSet resultSet = preparedStatement.executeQuery();
@@ -165,12 +179,12 @@ public class IncomesDAO implements Crud<Incomes>{
                 LocalDate data = resultSet.getDate("payment_date").toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
 
                 income = new Incomes(
-                    resultSet.getBoolean("fix_or_not"),
-                    data,
-                    resultSet.getDouble("value_incomes"),
-                    resultSet.getString("type_incomes"),
-                    resultSet.getInt("frequency"),
-                    elderly);
+                        resultSet.getBoolean("fix_or_not"),
+                        data,
+                        resultSet.getDouble("value_incomes"),
+                        resultSet.getString("type_incomes"),
+                        resultSet.getInt("frequency"),
+                        elderly);
                 income.setIdIncomes(resultSet.getLong("id_incomes"));
             }
         }
@@ -187,15 +201,15 @@ public class IncomesDAO implements Crud<Incomes>{
     // Select All method;
     @Override
     public List<Incomes> selectAll() {
-        
+
         List<Incomes> allIncomes = new ArrayList<>();
 
         try {
             mySqlConnection.openConnection();
 
-            PreparedStatement preparedStatement = 
-                mySqlConnection.getConnection().prepareStatement(SELECT_ALL_INCOMES);
-            
+            PreparedStatement preparedStatement =
+                    mySqlConnection.getConnection().prepareStatement(SELECT_ALL_INCOMES);
+
             ResultSet resultSet = preparedStatement.executeQuery();
 
             while(resultSet.next()) {
@@ -222,9 +236,63 @@ public class IncomesDAO implements Crud<Incomes>{
             System.out.println(e.getMessage());
         }
         finally {
-           mySqlConnection.closeConnection(); 
+            mySqlConnection.closeConnection();
         }
 
         return allIncomes;
+    }
+
+    public double sumIncomesById(Elderly elderly) {
+        double totalIncomes = 0.0;
+
+        try {
+            mySqlConnection.openConnection();
+
+            PreparedStatement preparedStatement =
+                    mySqlConnection.getConnection().prepareStatement(SELECT_INCOMES_BY_ELDERLY_ID);
+
+            preparedStatement.setLong(1, elderly.getIdElderly());
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            if (resultSet.next()) {
+                totalIncomes = resultSet.getDouble(1);
+            }
+        }
+        catch(SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        finally {
+            mySqlConnection.closeConnection();
+        }
+
+        return totalIncomes;
+    }
+
+    public double sumIncomeById(Elderly elderly) {
+        double totalExpenses = 0.0;
+
+        try {
+            mySqlConnection.openConnection();
+
+            PreparedStatement preparedStatement =
+                    mySqlConnection.getConnection().prepareStatement(SELECT_EXPENSES_BY_ELDERLY_ID);
+
+            preparedStatement.setLong(1, elderly.getIdElderly());
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            if (resultSet.next()) {
+                totalExpenses = resultSet.getDouble(1);
+            }
+        }
+        catch(SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        finally {
+            mySqlConnection.closeConnection();
+        }
+
+        return totalExpenses;
     }
 }
