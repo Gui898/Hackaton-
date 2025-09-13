@@ -8,11 +8,12 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.stereotype.Repository;
+
 import com.testSpring.Tests.model.Address;
 import com.testSpring.Tests.model.Elderly;
 import com.testSpring.Tests.persistence.Crud;
 import com.testSpring.Tests.persistence.MySqlConnection;
-import org.springframework.stereotype.Repository;
 
 // Class AddressDAO implementing the CRUD;
 @Repository
@@ -89,7 +90,7 @@ public class AddressDAO implements Crud<Address> {
             preparedStatement.executeUpdate();
         }
         catch(SQLException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
         finally {
 
@@ -119,7 +120,7 @@ public class AddressDAO implements Crud<Address> {
             preparedStatement.executeUpdate();
         }
         catch(SQLException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
         finally {
 
@@ -155,7 +156,7 @@ public class AddressDAO implements Crud<Address> {
             preparedStatement.executeUpdate();
         }
         catch(SQLException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
         finally {
 
@@ -204,7 +205,7 @@ public class AddressDAO implements Crud<Address> {
             }
         }
         catch(SQLException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
         finally {
 
@@ -256,7 +257,7 @@ public class AddressDAO implements Crud<Address> {
             }
         }
         catch(SQLException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
         finally {
 
