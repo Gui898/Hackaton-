@@ -26,7 +26,6 @@ import com.testSpring.Tests.service.ExpensesService;
 public class ExpensesController implements ProtocolMethods<Expenses> {
 
     private final ExpensesService expensesService;
-
     public ExpensesController(ExpensesService expensesService) {
         this.expensesService = expensesService;
     }

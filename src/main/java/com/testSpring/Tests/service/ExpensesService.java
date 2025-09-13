@@ -1,8 +1,11 @@
 package com.testSpring.Tests.service;
 
+import org.springframework.stereotype.Service;
+
 import com.testSpring.Tests.model.Expenses;
 import com.testSpring.Tests.persistence.DAO.ExpensesDAO;
 
+@Service
 public class ExpensesService {
 
     ExpensesDAO expensesDAO;
